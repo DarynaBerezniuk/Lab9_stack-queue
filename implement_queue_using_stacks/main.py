@@ -14,12 +14,12 @@ class MyStack:
         new_node.next = self.head
         self.head = new_node
 
-    def pop(self) -> Any:
+    def pop(self) -> int:
         data = self.head.data
         self.head = self.head.next
         return data
 
-    def top(self) -> bool:
+    def top(self) -> int:
         return self.head.data
 
     def empty(self) -> bool:
@@ -33,11 +33,11 @@ class MyQueue:
     def push(self, value) -> None:
         self.stack_in.push(value)
 
-    def pop(self) -> Any:
+    def pop(self) -> int:
         self._get_stack_out()
         return self.stack_out.pop()
 
-    def peek(self) -> Any:
+    def peek(self) -> int:
         self._get_stack_out()
         return self.stack_out.top()
 
