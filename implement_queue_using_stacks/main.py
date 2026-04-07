@@ -1,48 +1,51 @@
+from typing import Any
+
 class Node:
     def __init__(self, data) -> None:
         self.data = data
         self.next = None
 
-class MyQueue:
+class MyStack:
+    def __init__(self) -> None:
+        self.head = None
 
-    def __init__(self):
-        self.stack_in = None
-        self.stack_out = None
-        
-    def push(self, x: int) -> None:
-        new_node = Node(x)
-        new_node.next = self.stack_in
-        self.stack_in = new_node
-        
-    def pop(self) -> int:
-        self._get_out_stack()
+    def push(self, value: int) -> None:
+        new_node = Node(value)
+        new_node.next = self.head
+        self.head = new_node
 
-        data = self.stack_out.data
-        self.stack_out = self.stack_out.next
+    def pop(self) -> Any:
+        data = self.head.data
+        self.head = self.head.next
         return data
 
-    def peek(self) -> int:
-        self._get_out_stack()
+    def top(self) -> bool:
+        return self.head.data
 
-        return self.stack_out.data
-        
     def empty(self) -> bool:
-        return not self.stack_out and not self.stack_in
-        
-    def _get_out_stack(self) -> None:
-        if not self.stack_out:
-            while self.stack_in:
-                temp = self.stack_in
-                self.stack_in = self.stack_in.next
+        return self.head is None
 
-                temp.next = self.stack_out
-                self.stack_out = temp
+class MyQueue:
+    def __init__(self) -> None:
+        self.stack_in = MyStack()
+        self.stack_out = MyStack()
 
+    def push(self, value) -> None:
+        self.stack_in.push(value)
 
+    def pop(self) -> Any:
+        self._get_stack_out()
+        return self.stack_out.pop()
 
-# Your MyQueue object will be instantiated and called as such:
-# obj = MyQueue()
-# obj.push(x)
-# param_2 = obj.pop()
-# param_3 = obj.peek()
-# param_4 = obj.empty()
+    def peek(self) -> Any:
+        self._get_stack_out()
+        return self.stack_out.top()
+
+    def empty(self) -> bool:
+        return self.stack_in.empty() and self.stack_out.empty()
+    
+    def _get_stack_out(self) -> None:
+        if self.stack_out.empty():
+            while not self.stack_in.empty():
+                value = self.stack_in.pop()
+                self.stack_out.push(value)
